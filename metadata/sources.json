@@ -1,0 +1,20 @@
+{
+  "web_image_search": {
+    "count": 102,
+    "note": "百度/搜狗/360/Bing 图片搜索，查询词见 search_query；弱标签"
+  },
+  "wikimedia_commons": {
+    "count": 0,
+    "note": "Wikimedia Commons，自由许可，逐张 license 字段"
+  },
+  "docdiff_seal_assets": {
+    "count": 1597,
+    "license": "MIT (c) 2023 Zongyuan Yang",
+    "url": "https://github.com/Royalvice/DocDiff",
+    "note": "真实红章抠图+掩码，源自 ICDAR2023 RRC Seal Title 竞赛数据；用于 real_transplant 伪造合成"
+  },
+  "synthetic": {
+    "count": 496,
+    "note": "Pillow 渲染中文合同+公章+手写签名，种子 20261024 可复现"
+  }
+}

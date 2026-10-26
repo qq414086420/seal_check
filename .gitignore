@@ -1,0 +1,22 @@
+# 大文件与本地产物不入库
+raw/
+dist/
+runs/
+data/excluded/
+eval/agent_runs_v03_archive/
+seal-4.zip
+*.zip
+
+# 采集调试残留
+cookies.txt
+baidu_page.html
+baidu_test.json
+bing_test.html
+so360.json
+sogou.json
+commons1.json
+commons_tmp.json
+
+# Python
+__pycache__/
+*.pyc
