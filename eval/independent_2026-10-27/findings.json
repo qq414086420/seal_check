@@ -1,0 +1,90 @@
+[
+  {
+    "priority": "P1",
+    "title": "非 JSON 回退会把“不一致”判为“一致”",
+    "file": "scripts/run_eval.py",
+    "line": 87,
+    "evidence": "parse_answer 在 JSON 解析失败后按 choices 顺序做子串匹配。choices 为 [\"一致\",\"不一致\"] 时，原文“不一致”首先包含“一致”，返回错误选项且 parse_error=False。",
+    "recommendation": "删掉选项子串回退；只接受 JSON 对象和 answer 的完整选项匹配。格式失败单列并计入主准确率分母。"
+  },
+  {
+    "priority": "P1",
+    "title": "跑分结果丢失题型分组",
+    "file": "scripts/run_eval.py",
+    "line": 94,
+    "evidence": "work() 保存 group 字段，score() 调用 group_key() 却只检查 qtype/task。实际生成的记录进入 unknown，承诺的分题型正例准确率、负例召回不会正常产出。",
+    "recommendation": "写入 task/qtype，或让 group_key 优先读取 group；用真实 work() 输出格式做回归测试。"
+  },
+  {
+    "priority": "P1",
+    "title": "T1 漏检统计读取不存在的字段",
+    "file": "scripts/run_eval.py",
+    "line": 124,
+    "evidence": "T1 分支读取 r[\"answer\"]，实际预测结果字段为 answer_model。当前分组错误掩盖了该分支；修复分组后会出现 KeyError。",
+    "recommendation": "改成 answer_model；以 gold=假章、pred=真章的一条记录验证漏检数为 1。"
+  },
+  {
+    "priority": "P1",
+    "title": "解析失败可能抬高负例精确率",
+    "file": "scripts/run_eval.py",
+    "line": 116,
+    "evidence": "answer_model=None 与正例选项不相等，被当作负例报警；当 gold 为负例时还计入精确率分子，即使 correct=False。",
+    "recommendation": "报警集合只包含解析成功且明确选择负例的记录。解析失败既不是真阳性，也不是有效报警；另报失败率。"
+  },
+  {
+    "priority": "P1",
+    "title": "签名题主要区分字体外观",
+    "file": "scripts/gen_synthetic.py",
+    "line": 319,
+    "evidence": "printed=True 选择宋体，False 选择手写字体，二者均通过 ImageDraw.text 渲染。该合成标签可检验字体风格，却不足以证明模型能分辨真实笔迹与打印复制件。",
+    "recommendation": "将该分项命名为“手写体/印刷体外观”；另收集真实手签、扫描打印手签、电子签、签字笔迹复印件，单独评测实际书写来源。"
+  },
+  {
+    "priority": "P2",
+    "title": "原基线报告的分数格式写反",
+    "file": "scripts/score_agent_run.py",
+    "line": 87,
+    "evidence": "metrics() 返回 (accuracy,n)，报告却格式化为 (100*accuracy,n,accuracy)，accuracy 又被 %d 截断。出现“87.9%（3824/0）”。百分比本身与逐题复算相符。",
+    "recommendation": "直接输出 correct/n。本报告复算为 T4 3363/3824，T4-real 60/63，整图 1171/1528。"
+  },
+  {
+    "priority": "P2",
+    "title": "断点续跑缺少题集和模型版本隔离",
+    "file": "scripts/run_eval.py",
+    "line": 196,
+    "evidence": "结束时评分整个 predictions.jsonl，而不是本轮题集 task_id；续跑只按 task_id 跳过，未校验题干、图像、模型或提示词摘要。改 limit 或复用 out 目录会混入旧结果。",
+    "recommendation": "写入 dataset/model/prompt/image hash；续跑前验证一致性，并只对当前题集求交后的记录评分，缺失/多余/重复单列。"
+  },
+  {
+    "priority": "P2",
+    "title": "说明文档混用了多版统计",
+    "file": "README.md",
+    "line": 1,
+    "evidence": "当前清单实际为 782 图：realweb 102、synthetic 496、transplant 184；genuine 267、forged 479、no_seal 36。README 仍写 758/160/455，USAGE 写 T4=2604、平衡版=652、真实=35、整图=1175。",
+    "recommendation": "从 manifest 和 eval 自动生成 README、PACKAGE_INFO、USAGE 与 splits_stats，并在提交前校验统计一致。当前正确题数为 3824/1632/63/1528。"
+  },
+  {
+    "priority": "P2",
+    "title": "真实照片层没有负例",
+    "file": "eval/T4_real.jsonl",
+    "line": 1,
+    "evidence": "63 题来自 26 张真实图，全部为“一致/手写”。其高准确率只反映正例通过率，不能测真实场景抓假召回。真实网图的 genuine 仍为 weak 标签。",
+    "recommendation": "补充有来源凭证和人工复核的真实不一致、无章、真实伪造或数字篡改样本。真实域的误报和漏报分别报告。"
+  },
+  {
+    "priority": "P2",
+    "title": "文件路径与样本来源会泄露类别",
+    "file": "eval/T1T2_doc.jsonl",
+    "line": 1,
+    "evidence": "data/forged_real、realforge_* 与来源子集可暴露类别先验。若评测时把元数据一同传入，成绩可能来自路径而非图像。",
+    "recommendation": "考生只接收随机编号图像、题干、选项；对照表只保留在评分端。本次已准备去标签的分批输入。"
+  },
+  {
+    "priority": "P2",
+    "title": "题目存在相关性，应按图和底图分组",
+    "file": "eval/DESIGN.md",
+    "line": 1,
+    "evidence": "开放式和点名式共用印章核对事实；同一图的多题、同一底图的移植变体也并非独立样本。逐题百分比容易掩盖整图失败。",
+    "recommendation": "同时报图级全对率；按 target_file/pair_group 划分训练测试集，按底图计算置信区间，禁止同底图变体跨集合泄漏。"
+  }
+]
