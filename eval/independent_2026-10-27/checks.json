@@ -1,0 +1,51 @@
+{
+  "commit": "8c3a84e1a347dbeff2fa5a00a126d69dd98439e7",
+  "question_counts": {
+    "T4_consistency.jsonl": 3824,
+    "T4_real.jsonl": 63,
+    "T1T2_doc.jsonl": 1528,
+    "T4_balanced.jsonl": 1632
+  },
+  "total_questions": 5415,
+  "unique_task_ids": 5415,
+  "prediction_rows": 5415,
+  "unique_prediction_ids": 5415,
+  "missing": [],
+  "extra": [],
+  "duplicate_predictions": [],
+  "invalid_predictions": [],
+  "manifest_images": 782,
+  "evaluated_images": 782,
+  "manifest_subsets": {
+    "realweb": 102,
+    "synthetic": 496,
+    "real_transplant": 184
+  },
+  "manifest_labels": {
+    "genuine": 267,
+    "forged": 479,
+    "no_seal": 36
+  },
+  "missing_manifest_images": [],
+  "missing_repository_images": [],
+  "repository_images": 784,
+  "balanced_subset_of_full": true,
+  "balanced_distribution": {
+    "seal_party_open": {
+      "不一致": 259,
+      "一致": 259
+    },
+    "seal_party_named": {
+      "不一致": 259,
+      "一致": 259
+    },
+    "sig_rep_match": {
+      "不一致": 100,
+      "一致": 100
+    },
+    "sig_handwritten": {
+      "打印": 198,
+      "手写": 198
+    }
+  }
+}
