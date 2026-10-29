@@ -68,7 +68,7 @@ def main():
     # T4-ext 为后加的开放作答题型，若本次基线未覆盖则不计入缺失
     if not any(t.startswith("t4x-") for t in preds):
         missing = [t for t in missing if not t.startswith("t4x-")]
-    extra = [tid for tid in preds if tid not in gold]
+    extra = [tid for tid in preds if tid not in gold and not tid.startswith("t4x-")]
     rows = []
     for tid, g in gold.items():
         if tid not in preds:

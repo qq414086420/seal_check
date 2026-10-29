@@ -19,6 +19,29 @@ def read_jsonl(path):
         return [json.loads(ln) for ln in f if ln.strip()]
 
 
+def _norm(s):
+    if not s:
+        return ""
+    s = s.strip().replace(" ", "").replace("\u3000", "")
+    return s.replace("（", "(").replace("）", ")")
+
+
+def _edit_distance(a, b):
+    la, lb = len(a), len(b)
+    if la == 0:
+        return lb
+    if lb == 0:
+        return la
+    prev = list(range(lb + 1))
+    for i in range(1, la + 1):
+        cur = [i] + [0] * lb
+        ca = a[i - 1]
+        for j in range(1, lb + 1):
+            cur[j] = min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != b[j - 1]))
+        prev = cur
+    return prev[lb]
+
+
 def norm_cmp(s):
     if not s:
         return None
@@ -196,22 +219,71 @@ def main():
                              "matches_party": sd.get("matches_party")},
                 "meta": {"note": "开放作答；评分=归一化编辑距离"},
             })
-    for u in real_labels.values():
-        img = "data/real/" + u["file"]
-        for side in ("A", "B"):
-            sd = next((s for s in u["seals"] if s["side"] == side), None)
-            if not sd or not sd.get("readable") or not sd.get("company"):
-                continue
-            tag = "甲方" if side == "A" else "乙方"
-            qid += 1
-            ext.append({
-                "task_id": "t4x-%05d" % qid, "image": img, "task": "T4_ext",
-                "qtype": "seal_text_extract", "side": side,
-                "question": "这是一份合同文件图片。请读出图中%s（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。" % tag,
-                "choices": None, "answer": sd["company"],
-                "evidence": {"party": u.get("party_" + side.lower())},
-                "meta": {"label_source": "dual_pass_consensus", "silver": True},
-            })
+    # ---------- T4-ext 真实图扩展：共识 / 双通道近似冲突 / 单通道 三级 gold ----------
+    ann = os.path.join(BASE, "metadata", "annotate")
+
+    def load_pass_set(pattern):
+        recs = {}
+        for p in glob.glob(os.path.join(ann, pattern)):
+            for r in read_jsonl(p):
+                recs[r["file"]] = r
+        return recs
+
+    ch1 = {**load_pass_set("real_t4_pass1_A.jsonl"), **load_pass_set("real_t4_pass1_B.jsonl")}
+    ch2 = {**load_pass_set("real_t4_pass2_A.jsonl"), **load_pass_set("real_t4_pass2_B.jsonl")}
+    mr_path = os.path.join(ann, "manual_review.jsonl")
+    manual = {}
+    if os.path.exists(mr_path):
+        for r in read_jsonl(mr_path):
+            manual[(r["file"], r.get("side", ""))] = r
+
+    def pick_gold(f, key, side, allow_override=False):
+        # 人工复核覆盖仅在章面提取题上生效，避免章面覆盖文字泄漏到主体/法代/签名题
+        if allow_override:
+            ov = manual.get((f, side))
+            if ov and ov.get("field") == "seal" and ov.get("text"):
+                return ov["text"], "manual_review"
+        v1, v2 = ch1.get(f, {}).get(key), ch2.get(f, {}).get(key)
+        if v1 and v2:
+            if _norm(v1) == _norm(v2):
+                return v1, "consensus"
+            if _edit_distance(_norm(v1), _norm(v2)) <= 3:
+                return v1, "conflict_near"
+            return v1, "conflict_far"
+        if v1:
+            return v1, "single_pass"
+        if v2:
+            return v2, "single_pass"
+        return None, None
+
+    for rec in mani:
+        if rec["subset"] != "realweb":
+            continue
+        f = os.path.basename(rec["file"])
+        img = rec["file"]
+        for side, tag in (("a", "甲方"), ("b", "乙方")):
+            fields = [
+                ("seal_text_extract", "seal_%s_text" % side,
+                 "请读出图中%s（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。" % tag),
+                ("party_text_extract", "party_%s" % side,
+                 "请读出这份合同中%s的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。" % tag),
+                ("legal_rep_extract", "legal_rep_%s" % side,
+                 "请读出这份合同中%s法定代表人的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。" % tag),
+                ("sig_name_extract", "sig_%s_name" % side,
+                 "请读出图中%s法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。" % tag),
+            ]
+            for qt, key, stem in fields:
+                gold_txt, conf = pick_gold(f, key, side, allow_override=(qt == "seal_text_extract"))
+                if not gold_txt:
+                    continue
+                qid += 1
+                ext.append({
+                    "task_id": "t4x-%05d" % qid, "image": img, "task": "T4_ext",
+                    "qtype": qt, "side": side.upper(),
+                    "question": "这是一份真实合同照片。" + stem,
+                    "choices": None, "answer": gold_txt,
+                    "meta": {"gold_confidence": conf, "silver": True},
+                })
     write_jsonl(os.path.join(EVAL, "T4_extract.jsonl"), ext)
 
     # ---------- T1/T2：整图任务（附带生成） ----------
