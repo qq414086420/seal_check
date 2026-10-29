@@ -78,7 +78,9 @@ def call_api(base_url, api_key, model, messages, timeout=180):
 
 
 def parse_answer(raw, choices):
-    """从模型输出解析选项；返回 (answer 或 None, is_parse_error)。choices 为 None 时是开放作答题。"""
+    """从模型输出解析选项；返回 (answer 或 None, is_parse_error)。choices 为 None 时是开放作答题。
+    评分纪律：只接受 JSON 的 answer 且命中选项原文；格式错误一律 parse_error，不做子串回退
+    （否则“不一致”会因包含“一致”而被误判为后者）。"""
     if raw.startswith("__ERROR__"):
         return None, True
     if not choices:
@@ -92,14 +94,12 @@ def parse_answer(raw, choices):
                 return ans, False
         except Exception:
             pass
-    for ch in choices:
-        if ch in raw:
-            return ch, False
     return None, True
 
 
 def group_key(item):
-    return item.get("qtype") or item.get("task") or "unknown"
+    # 预测记录在 work() 里已写入 group；评测原题走 qtype/task
+    return item.get("group") or item.get("qtype") or item.get("task") or "unknown"
 
 
 def score(rows):
@@ -133,10 +133,10 @@ def score(rows):
                 out.append("- 正例准确率（%s）：%.1f%%" % (pos_ans, 100 * sum(1 for r in pos if r["correct"]) / len(pos)))
             if neg:
                 out.append("- 负例召回（抓假能力）：%.1f%%" % (100 * sum(1 for r in neg if r["correct"]) / len(neg)))
-            pred_neg = [r for r in rs if r["answer_model"] != pos_ans]
+            pred_neg = [r for r in rs if (not r.get("parse_error")) and r["answer_model"] != pos_ans]
             if pred_neg:
                 nprec = 100 * sum(1 for r in pred_neg if r["answer_gold"] != pos_ans) / len(pred_neg)
-                out.append("- 负例精确率（报警准确率）：%.1f%%" % nprec)
+                out.append("- 负例精确率（报警准确率，剔除解析失败）：%.1f%%" % nprec)
                 nrec = 100 * sum(1 for r in neg if r["correct"]) / len(neg) if neg else 0
                 if nprec + nrec > 0:
                     out.append("- 负例 F1：%.1f%%" % (2 * nprec * nrec / (nprec + nrec)))

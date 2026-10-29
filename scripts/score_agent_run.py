@@ -110,8 +110,9 @@ def main():
         if not rs:
             continue
         m = metrics(rs)
+        correct_n = round(m[0] * m[1])
         lines += ["## %s" % title, "",
-                  "- 总准确率：**%.1f%%**（%d/%d）" % (100 * m[0], m[1], m[0]), ""]
+                  "- 总准确率：**%.1f%%**（%d/%d）" % (100 * m[0], correct_n, m[1]), ""]
         if layer == "doc":
             gr = {}
             for r in rs:

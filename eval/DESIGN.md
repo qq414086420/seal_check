@@ -49,7 +49,9 @@ party_a/b、legal_rep_a/b、seals[{company, readable, matches_party, genuine}]�
 - **Q1 章面单位名 ↔ 合同主体一致性**：`seal_detail.matches_party`（party_mismatch 34 张为负例）
   问法：图中红色公章刻制的单位名称，与合同甲方/乙方名称是否一致？
 - **Q2 签名 ↔ 法定代表人一致性**：`signature_detail[].matches_rep`（sig_mismatch 负例）
-- **Q3 签名是否为打印体**：`signature_detail[].printed`（sig_printed 负例）
+- **Q3 签名是否为打印体**：`signature_detail[].printed`（sig_printed 负例）。
+  ⚠️ 口径说明：合成签名是"手写字体 vs 宋体印刷体"的**外观**区分，不等于真实笔迹鉴别；
+  报告中该分项应读作"印刷体外观识别"。真实手签/扫描打印手签/电子签的鉴别需要另采真实样本
 - **Q4 章面文字提取（T4-ext，开放作答 903 题）**：只输出章面刻制的单位名称本身；
   gold = 构造/共识的章面刻名（含伪造章上实际刻的名字）；评分 = 归一化编辑距离（精确匹配 / ED≤2 近似 / 平均 ED）。
   独立于判定题计分，支撑"先提取（允许 OCR 噪声）→ 后判定"的两轮循环工作流。合成 876 题 + 真实 27 题（text_flip 反排章跳过）
