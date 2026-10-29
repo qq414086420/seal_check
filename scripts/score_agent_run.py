@@ -22,11 +22,35 @@ def read_jsonl(p):
         return [json.loads(ln) for ln in f if ln.strip()]
 
 
+def edit_distance(a, b):
+    la, lb = len(a), len(b)
+    if la == 0:
+        return lb
+    if lb == 0:
+        return la
+    prev = list(range(lb + 1))
+    for i in range(1, la + 1):
+        cur = [i] + [0] * lb
+        ca = a[i - 1]
+        for j in range(1, lb + 1):
+            cur[j] = min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (ca != b[j - 1]))
+        prev = cur
+    return prev[lb]
+
+
+def norm_txt(s):
+    if not s:
+        return ""
+    s = s.strip().replace(" ", "").replace("\u3000", "")
+    return s.replace("（", "(").replace("）", ")")
+
+
 def main():
     gold = {}
     for f in ("T4_consistency.jsonl", "T4_real.jsonl", "T1T2_doc.jsonl"):
         for r in read_jsonl(os.path.join(BASE, "eval", f)):
             gold[r["task_id"]] = r
+    ext_gold = read_jsonl(os.path.join(BASE, "eval", "T4_extract.jsonl"))
 
     subset_map = {}
     for r in read_jsonl(os.path.join(BASE, "metadata", "manifest.jsonl")):
@@ -41,6 +65,9 @@ def main():
             preds[r["task_id"]] = r["answer"]
 
     missing = [tid for tid in gold if tid not in preds]
+    # T4-ext 为后加的开放作答题型，若本次基线未覆盖则不计入缺失
+    if not any(t.startswith("t4x-") for t in preds):
+        missing = [t for t in missing if not t.startswith("t4x-")]
     extra = [tid for tid in preds if tid not in gold]
     rows = []
     for tid, g in gold.items():
@@ -149,6 +176,34 @@ def main():
             lines.append("- 含负例图的负例全抓率（该图负例题全对的比例）：%d/%d = %.1f%%" %
                          (neg_hit, len(neg_imgs), 100.0 * neg_hit / len(neg_imgs)))
         lines.append("")
+
+    # T4-ext 开放作答评分（编辑距离）
+    if any(t.startswith("t4x-") for t in preds):
+        ex_rows = []
+        for g in ext_gold:
+            tid = g["task_id"]
+            if tid not in preds:
+                continue
+            p, go = norm_txt(preds[tid]), norm_txt(g["answer"])
+            ed = edit_distance(p, go)
+            ex_rows.append({"task_id": tid, "ed": ed, "exact": ed == 0, "near": ed <= 2,
+                            "image": g["image"], "gold": g["answer"], "pred": preds[tid]})
+        if ex_rows:
+            n = len(ex_rows)
+            exact = sum(1 for r in ex_rows if r["exact"])
+            near = sum(1 for r in ex_rows if r["near"])
+            mean_ed = sum(r["ed"] for r in ex_rows) / n
+            lines += ["## T4-ext 章面文字提取（开放作答，编辑距离评分）", "",
+                      "- 题数：%d" % n,
+                      "- 精确匹配率：**%.1f%%**" % (100.0 * exact / n),
+                      "- 近似匹配率（编辑距离≤2）：**%.1f%%**" % (100.0 * near / n),
+                      "- 平均编辑距离：%.2f" % mean_ed,
+                      "- 完全错误（ED>5）：%d 题" % sum(1 for r in ex_rows if r["ed"] > 5), "",
+                      "| task_id | 图片 | 标准名称 | 考生输出 | ED |", "|---|---|---|---|---|"]
+            for r in sorted(ex_rows, key=lambda x: -x["ed"])[:10]:
+                lines.append("| %s | %s | %s | %s | %d |" % (r["task_id"], os.path.basename(r["image"]),
+                                                             r["gold"], r["pred"], r["ed"]))
+            lines.append("")
 
     with open(os.path.join(RUNS, "report.md"), "w", encoding="utf-8") as f:
         f.write("\n".join(lines) + "\n")

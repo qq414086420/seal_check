@@ -26,6 +26,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(BASE, "scripts"))
 from build_eval import read_jsonl  # noqa: E402
+from score_agent_run import edit_distance, norm_txt  # noqa: E402
 
 POS_ANS = {"seal_party_open": "一致", "seal_party_named": "一致",
            "sig_rep_match": "一致", "sig_handwritten": "手写"}
@@ -43,7 +44,11 @@ def encode_image(rel_path):
 
 
 def build_messages(item):
-    text = item["question"] + "\n可选项：%s\n请从可选项中选择唯一答案，输出 JSON。" % " / ".join(item["choices"])
+    text = item["question"]
+    if item.get("choices"):
+        text += "\n可选项：%s\n请从可选项中选择唯一答案，输出 JSON。" % " / ".join(item["choices"])
+    else:
+        text += "\n只输出该名称本身，输出 JSON：{\"answer\": \"<名称>\"}。"
     return [
         {"role": "system", "content": SYSTEM_PROMPT},
         {"role": "user", "content": [
@@ -73,9 +78,12 @@ def call_api(base_url, api_key, model, messages, timeout=180):
 
 
 def parse_answer(raw, choices):
-    """从模型输出解析选项；返回 (answer 或 None, is_parse_error)。"""
+    """从模型输出解析选项；返回 (answer 或 None, is_parse_error)。choices 为 None 时是开放作答题。"""
     if raw.startswith("__ERROR__"):
         return None, True
+    if not choices:
+        ans = raw.strip().strip('"').strip("'").strip("`").replace("答案：", "").replace("答案:", "").strip()
+        return (ans if ans else None), False
     m = re.search(r"\{.*\}", raw, re.S)
     if m:
         try:
@@ -102,6 +110,18 @@ def score(rows):
              "- 模型：%s" % rows[0].get("model", "?") if rows else "# empty",
              "- 样本数：%d；解析失败：%d" % (len(rows), sum(1 for r in rows if r.get("parse_error"))), ""]
     for g, rs in sorted(groups.items()):
+        if g == "seal_text_extract":
+            eds = [edit_distance(norm_txt(r["answer_model"] or ""), norm_txt(r["answer_gold"] or ""))
+                   for r in rs if not r.get("parse_error")]
+            n = len(eds)
+            exact = sum(1 for e in eds if e == 0)
+            near = sum(1 for e in eds if e <= 2)
+            lines += ["## %s（开放作答，编辑距离评分）" % g, "",
+                      "- 有效作答：%d（解析失败 %d）" % (n, len(rs) - n),
+                      "- 精确匹配率：%.1f%%" % (100.0 * exact / n if n else 0),
+                      "- 近似匹配率（ED≤2）：%.1f%%" % (100.0 * near / n if n else 0),
+                      "- 平均编辑距离：%.2f" % (sum(eds) / n if n else 0), ""]
+            continue
         n = len(rs)
         acc = sum(1 for r in rs if r["correct"]) / n
         out = ["## %s" % g, "- 题数：%d" % n, "- 准确率：%.1f%%" % (100 * acc)]
@@ -121,7 +141,7 @@ def score(rows):
                 if nprec + nrec > 0:
                     out.append("- 负例 F1：%.1f%%" % (2 * nprec * nrec / (nprec + nrec)))
         if g == "T1":
-            fp = sum(1 for r in rs if r["answer"] == "真章" and r["answer_gold"] == "假章")
+            fp = sum(1 for r in rs if r["answer_model"] == "真章" and r["answer_gold"] == "假章")
             out.append("- 把假章判成真章（漏检）：%d" % fp)
         lines += out + [""]
     return "\n".join(lines)

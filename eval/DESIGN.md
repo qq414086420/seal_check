@@ -50,6 +50,9 @@ party_a/b、legal_rep_a/b、seals[{company, readable, matches_party, genuine}]�
   问法：图中红色公章刻制的单位名称，与合同甲方/乙方名称是否一致？
 - **Q2 签名 ↔ 法定代表人一致性**：`signature_detail[].matches_rep`（sig_mismatch 负例）
 - **Q3 签名是否为打印体**：`signature_detail[].printed`（sig_printed 负例）
+- **Q4 章面文字提取（T4-ext，开放作答 903 题）**：只输出章面刻制的单位名称本身；
+  gold = 构造/共识的章面刻名（含伪造章上实际刻的名字）；评分 = 归一化编辑距离（精确匹配 / ED≤2 近似 / 平均 ED）。
+  独立于判定题计分，支撑"先提取（允许 OCR 噪声）→ 后判定"的两轮循环工作流。合成 876 题 + 真实 27 题（text_flip 反排章跳过）
 - **指标**：逐问准确率；负例召回（能否发现"冒用他公司章""冒签"）
 
 ## 二、诊断分层（所有任务共用的切片维度）

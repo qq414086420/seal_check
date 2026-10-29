@@ -172,6 +172,48 @@ def main():
                 })
     write_jsonl(os.path.join(EVAL, "T4_real.jsonl"), t4r)
 
+    # ---------- T4-ext：章面文字提取（开放作答，考章面 OCR；真值=构造/共识的章面刻名） ----------
+    ext = []
+    for rec in mani:
+        if rec["subset"] != "synthetic":
+            continue
+        if "text_flip" in (rec.get("forgery_types") or []):
+            continue  # 反排章的"正确读法"有歧义，跳过
+        raw = syn_raw.get(os.path.basename(rec["file"]), {})
+        img = rec["file"]
+        for side in ("A", "B"):
+            sd = next((s for s in rec.get("seal_detail", []) if s.get("side") == side), None)
+            if not sd or not sd.get("company"):
+                continue
+            tag = "甲方" if side == "A" else "乙方"
+            qid += 1
+            ext.append({
+                "task_id": "t4x-%05d" % qid, "image": img, "task": "T4_ext",
+                "qtype": "seal_text_extract", "side": side,
+                "question": "这是一份合同文件图片。请读出图中%s（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。" % tag,
+                "choices": None, "answer": sd["company"],
+                "evidence": {"party": raw.get("party_" + side.lower()),
+                             "matches_party": sd.get("matches_party")},
+                "meta": {"note": "开放作答；评分=归一化编辑距离"},
+            })
+    for u in real_labels.values():
+        img = "data/real/" + u["file"]
+        for side in ("A", "B"):
+            sd = next((s for s in u["seals"] if s["side"] == side), None)
+            if not sd or not sd.get("readable") or not sd.get("company"):
+                continue
+            tag = "甲方" if side == "A" else "乙方"
+            qid += 1
+            ext.append({
+                "task_id": "t4x-%05d" % qid, "image": img, "task": "T4_ext",
+                "qtype": "seal_text_extract", "side": side,
+                "question": "这是一份合同文件图片。请读出图中%s（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。" % tag,
+                "choices": None, "answer": sd["company"],
+                "evidence": {"party": u.get("party_" + side.lower())},
+                "meta": {"label_source": "dual_pass_consensus", "silver": True},
+            })
+    write_jsonl(os.path.join(EVAL, "T4_extract.jsonl"), ext)
+
     # ---------- T1/T2：整图任务（附带生成） ----------
     t12 = []
     qid = 0

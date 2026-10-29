@@ -7,10 +7,12 @@
 """
 import json
 import os
+import sys
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EVAL = os.path.join(BASE, "eval")
-OUT = os.path.join(EVAL, "agent_runs", "full")
+EXT_ONLY = "--ext-only" in sys.argv
+OUT = os.path.join(EVAL, "agent_runs", "ext" if EXT_ONLY else "full")
 PER_BATCH = 70
 
 
@@ -20,8 +22,12 @@ def read_jsonl(p):
 
 
 def main():
+    if EXT_ONLY:
+        files = ["T4_extract.jsonl"]
+    else:
+        files = ["T4_consistency.jsonl", "T4_real.jsonl", "T4_extract.jsonl", "T1T2_doc.jsonl"]
     questions = []
-    for f in ("T4_consistency.jsonl", "T4_real.jsonl", "T1T2_doc.jsonl"):
+    for f in files:
         for q in read_jsonl(os.path.join(EVAL, f)):
             img = q.get("image") or q.get("file")
             questions.append({
