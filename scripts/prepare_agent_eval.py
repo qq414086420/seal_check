@@ -24,8 +24,10 @@ def read_jsonl(p):
 def main():
     if EXT_ONLY:
         files = ["T4_extract.jsonl"]
+        prefix = "ext_batch"
     else:
         files = ["T4_consistency.jsonl", "T4_real.jsonl", "T4_extract.jsonl", "T1T2_doc.jsonl"]
+        prefix = "full_batch"
     questions = []
     for f in files:
         for q in read_jsonl(os.path.join(EVAL, f)):
@@ -46,7 +48,7 @@ def main():
     total = 0
     for i in range(0, len(items), PER_BATCH):
         n_batch += 1
-        path = os.path.join(OUT, "full_batch_%d_questions.jsonl" % n_batch)
+        path = os.path.join(OUT, "%s_%d_questions.jsonl" % (prefix, n_batch))
         cnt = 0
         with open(path, "w", encoding="utf-8") as f:
             for img, qs in items[i:i + PER_BATCH]:
