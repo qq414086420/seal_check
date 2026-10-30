@@ -1,0 +1,20 @@
+{"file": "realweb_0033.jpg", "key": "seal_b_text", "exclude": false, "gold_corrected": "广州某某科技有限公司", "old_gold": "广州市其科技有限公司", "model_answer": "广州市其科名有限公司", "source": "user_review", "task_id": "t4x-04759"}
+{"file": "realweb_0079.jpg", "key": "seal_b_text", "exclude": false, "gold_corrected": "乙方印章为陕西中基电业有限公司，左上甲方是上海鑫阳投资发展有限公司，左中为上海文阳科技发展有限公司，右中为上海通普产权经济有限公司，右下为上海技术产权交易所", "old_gold": "上海中基电业有限公司", "model_answer": "上海中基电业有限公司", "source": "user_review", "task_id": "t4x-04764"}
+{"file": "realweb_0291.jpg", "key": "seal_a_text", "exclude": false, "gold_corrected": "大连市农工商联合企业总公司", "old_gold": "大连市工商联合企业建设公司", "model_answer": "大连市上海路联合企业总公司", "source": "user_review", "task_id": "t4x-04775"}
+{"file": "realweb_0341.jpg", "key": "legal_rep_b", "exclude": false, "gold_corrected": "袁建华是乙方名称，甲方印章可以辨识公司名称为陕西中基电业有限公司", "old_gold": "袁建华", "model_answer": "袁建华", "source": "user_review", "task_id": "t4x-04778"}
+{"file": "realweb_0356.jpg", "key": "seal_a_text", "exclude": false, "gold_corrected": "读取不完整长沙县人民医院（湖南省人民医院星沙院区）", "old_gold": "湖南省人民医院（星沙院区）人事部", "model_answer": "湖南省人民医院星沙院区", "source": "user_review", "task_id": "t4x-04780"}
+{"file": "realweb_0572.jpg", "key": "seal_b_text", "exclude": false, "gold_corrected": "西安荣康置业有限公司", "old_gold": "河北荣康置业有限公司", "model_answer": "陕西荣康置业有限公司", "source": "user_review", "task_id": "t4x-04840"}
+{"file": "realweb_0579.jpg", "key": "seal_a_text", "exclude": false, "gold_corrected": "上海蒸冉投资管理有限公司", "old_gold": "上海泰冉投资管理有限公司", "model_answer": "上海素冉投资管理有限公司", "source": "user_review", "task_id": "t4x-04842"}
+{"file": "realweb_0662.jpg", "key": "seal_a_text", "exclude": false, "gold_corrected": "西安外国语大学", "old_gold": "天津外国语大学滨海外事学院", "model_answer": "天津外国语大学滨海外事学院", "source": "user_review", "task_id": "t4x-04878"}
+{"file": "realweb_0730.jpg", "key": "seal_b_text", "exclude": false, "gold_corrected": "无锡美涛佳艺影视文化工作室", "old_gold": "无锡美涛祥艺影视文化工作室", "model_answer": "无锡美涛柏艺冰文化工作室", "source": "user_review", "task_id": "t4x-04881"}
+{"file": "realweb_0730.jpg", "key": "party_b", "exclude": false, "gold_corrected": "无锡美涛佳艺影视文化工作室", "old_gold": "无锡美涛祥艺影视文化工作室", "model_answer": "无锡美涛柏艺冰文化工作室", "source": "user_review", "task_id": "t4x-04882"}
+{"file": "realweb_0767.jpg", "key": "seal_b_text", "exclude": false, "gold_corrected": "广西南宁将帅门企业管理有限公司", "old_gold": "海南将军门企业管理有限公司", "model_answer": "上海将帅门企业管理有限公司", "source": "user_review", "task_id": "t4x-04883"}
+{"file": "realweb_0767.jpg", "key": "party_b", "exclude": false, "gold_corrected": "广西南宁将帅门企业管理有限公司", "old_gold": "海南将军门企业管理有限公司", "model_answer": "上海将帅门企业管理有限公司", "source": "user_review", "task_id": "t4x-04884"}
+{"file": "realweb_0850.jpg", "key": "seal_a_text", "exclude": false, "gold_corrected": "揭阳市怀瑾堂珠宝有限公司", "old_gold": "揭阳市乔琳珠宝有限公司", "model_answer": "揭阳市乔林堡珠宝有限公司", "source": "user_review", "task_id": "t4x-04893"}
+{"file": "realweb_0558.jpg", "key": "seal_a_text", "exclude": true, "reason": "完全不清晰", "source": "user_review", "task_id": "t4x-04832"}
+{"file": "realweb_0588.jpg", "key": "seal_a_text", "exclude": true, "reason": "看不清，需要结合合同判断", "source": "user_review", "task_id": "t4x-04846"}
+{"file": "realweb_0341.jpg", "key": "legal_rep_a", "exclude": true, "reason": "gold 误挂乙方信息（袁建华），甲方章面为陕西中基电业；正确法代名不可靠，剔除", "source": "user_review", "task_id": "t4x-04778"}
+{"task_id": "t4x-04757", "verdict": "错误", "note": "", "key": "party_a", "resolution": "保留 gold，计模型识别错误", "model_answer": "广州万科"}
+{"task_id": "t4x-04841", "verdict": "错误", "note": "", "key": "party_b", "resolution": "保留 gold，计模型识别错误", "model_answer": "陕西荣康置业有限公司"}
+{"task_id": "t4x-04853", "verdict": "错误", "note": "重庆市九龙坡区走马镇人民政府", "key": "seal_a_text", "resolution": "备注与 gold 相同：保留 gold，计模型识别错误", "model_answer": "成都市龙泉驿区走马镇人民政府"}
+{"task_id": "t4x-04854", "verdict": "错误", "note": "重庆市九龙坡区走马镇人民政府", "key": "party_a", "resolution": "备注与 gold 相同：保留 gold，计模型识别错误", "model_answer": "成都市龙泉驿区走马镇人民政府"}

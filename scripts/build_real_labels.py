@@ -1,11 +1,7 @@
 # -*- coding: utf-8 -*-
-"""把真实图的双通道共识标注转成与合成图 synthetic_manifest 同构的标签格式。
-输出 metadata/realweb_labels.jsonl，字段对齐 synthetic_manifest：
-  file/contract_type/party_a/party_b/legal_rep_a/legal_rep_b/
-  seal_present/seal_genuine/seal_mode/
-  seals[]: {side, company, readable, matches_party, genuine, kind}
-  signatures[]: {side, name, readable, matches_rep, printed, forgery}
-真实图特有：annotation 元信息（银标准来源、可读性门控）。
+"""把真实图的双通道共识标注 + 人工审核修正转成与 synthetic_manifest 同构的标签格式。
+覆盖层级：双通道共识 < 人工复核（manual_review.jsonl，key 级：修正 gold_corrected / 剔除 exclude）。
+输出 metadata/realweb_labels.jsonl，字段对齐 synthetic_manifest。
 """
 import json
 import os
@@ -29,12 +25,14 @@ def norm(s):
 
 def main():
     cons = {r["file"]: r for r in read_jsonl(os.path.join(BASE, "metadata", "annotate", "real_t4_consensus.jsonl"))}
-    # 人工复核覆盖层：人工判定优先于机器共识（如联合体盖章豁免）
+    # 人工复核覆盖层（key 级：seal_X_text / party_X / legal_rep_X / sig_X_name）
     overrides = {}
     mr = os.path.join(BASE, "metadata", "annotate", "manual_review.jsonl")
     if os.path.exists(mr):
         for r in read_jsonl(mr):
-            overrides[(r["file"], r.get("side", ""))] = r
+            key = r.get("key") or ("seal_%s_text" % r["side"] if r.get("field") == "seal" and r.get("side") else None)
+            if key:
+                overrides[(r["file"], key)] = r
     mani = read_jsonl(os.path.join(BASE, "metadata", "manifest.jsonl"))
 
     out = []
@@ -45,49 +43,59 @@ def main():
         c = cons.get(f)
         if not c:
             continue
+
+        def resolve(kind, side):
+            """字段值：共识 < 人工覆盖。返回 (值, 是否被剔除)。"""
+            key = "%s_%s" % (kind, side)
+            o = overrides.get((f, key))
+            base = c.get(key)
+            if o:
+                if o.get("exclude"):
+                    return None, True
+                if o.get("gold_corrected"):
+                    return o["gold_corrected"], False
+            return base, False
+
+        party, legal_rep = {}, {}
         seals, sigs = [], []
         for side in ("a", "b"):
             S = side.upper()
-            seal_text = c.get("seal_%s_text" % side)
-            party = c.get("party_%s" % side)
-            entry = {
+            party[side] = resolve("party", side)[0]
+            legal_rep[side] = resolve("legal_rep", side)[0]
+
+            stv, st_ex = resolve("seal_text", side)
+            seals.append({
                 "side": S,
-                "company": seal_text,                       # 章面实际刻名（共识转录）
-                "readable": bool(c.get("seal_%s_readable" % side)) and bool(seal_text),
-                "matches_party": (norm(seal_text) == norm(party)) if (seal_text and party) else None,
-                "genuine": True,                            # 审核通过的真实合同，默认真章（弱假设）
-                "kind": None,                               # 真实图未标注章种类
-            }
-            ov = overrides.get((f, side))
-            if ov and ov.get("field") == "seal":
-                entry["readable"] = bool(ov.get("readable"))
-                entry["company"] = ov.get("text")
-                entry["matches_party"] = ov.get("matches_party")
-                entry["manual_review"] = {"reviewer": ov.get("reviewer"), "date": ov.get("date"),
-                                          "note": ov.get("note")}
-            seals.append(entry)
+                "company": stv,
+                "readable": bool(stv) and not st_ex,
+                "matches_party": (norm(stv) == norm(party[side])) if (stv and party[side]) else None,
+                "genuine": True,
+                "kind": None,
+            })
+
+            snv, sn_ex = resolve("sig_name", side)
             sigs.append({
                 "side": S,
-                "name": c.get("sig_%s_name" % side),
-                "readable": bool(c.get("sig_%s_readable" % side)) and bool(c.get("sig_%s_name" % side)),
-                "matches_rep": (norm(c.get("sig_%s_name" % side)) == norm(c.get("legal_rep_%s" % side)))
-                               if (c.get("sig_%s_name" % side) and c.get("legal_rep_%s" % side)) else None,
+                "name": snv,
+                "readable": bool(snv) and not sn_ex,
+                "matches_rep": (norm(snv) == norm(legal_rep[side])) if (snv and legal_rep[side]) else None,
                 "printed": bool(c.get("sig_%s_printed" % side)),
                 "forgery": [],
             })
+
         seal_present = any(s["readable"] for s in seals) or bool(rec.get("has_seal_signal"))
         out.append({
             "file": f,
             "subset": "realweb",
             "contract_type": None,
-            "party_a": c.get("party_a"), "party_b": c.get("party_b"),
-            "legal_rep_a": c.get("legal_rep_a"), "legal_rep_b": c.get("legal_rep_b"),
+            "party_a": party["a"], "party_b": party["b"],
+            "legal_rep_a": legal_rep["a"], "legal_rep_b": legal_rep["b"],
             "seal_present": seal_present,
             "seal_genuine": True if rec["label"] == "genuine" else None,
             "seal_mode": "genuine_reviewed" if rec["label"] == "genuine" else "no_seal",
             "seals": seals,
             "signatures": sigs,
-            "annotation": {"source": "dual_pass_consensus", "silver": True,
+            "annotation": {"source": "dual_pass_consensus+manual_review", "silver": True,
                            "full_consensus": bool(c.get("full_consensus"))},
         })
 
@@ -102,7 +110,7 @@ def main():
     print("realweb labels:", len(out))
     print("  images with readable seal+party (可出章面题):", n_seal)
     print("  images with readable signature (可出签名题):", n_sig)
-    print("  consensus 不一致章面实例:", n_match)
+    print("  不一致章面实例（含人工复核修正后）:", n_match)
 
 
 if __name__ == "__main__":

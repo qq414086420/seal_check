@@ -237,12 +237,14 @@ def main():
         for r in read_jsonl(mr_path):
             manual[(r["file"], r.get("side", ""))] = r
 
-    def pick_gold(f, key, side, allow_override=False):
-        # 人工复核覆盖仅在章面提取题上生效，避免章面覆盖文字泄漏到主体/法代/签名题
-        if allow_override:
-            ov = manual.get((f, side))
-            if ov and ov.get("field") == "seal" and ov.get("text"):
-                return ov["text"], "manual_review"
+    def pick_gold(f, key, side):
+        # key 级人工覆盖（用户审核修正/剔除）对所有提取题型生效
+        ov = manual.get((f, key))
+        if ov:
+            if ov.get("exclude"):
+                return None, "excluded"
+            if ov.get("gold_corrected"):
+                return ov["gold_corrected"], "manual"
         v1, v2 = ch1.get(f, {}).get(key), ch2.get(f, {}).get(key)
         if v1 and v2:
             if _norm(v1) == _norm(v2):
@@ -273,7 +275,7 @@ def main():
                  "请读出图中%s法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。" % tag),
             ]
             for qt, key, stem in fields:
-                gold_txt, conf = pick_gold(f, key, side, allow_override=(qt == "seal_text_extract"))
+                gold_txt, conf = pick_gold(f, key, side)
                 if not gold_txt:
                     continue
                 qid += 1

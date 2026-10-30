@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="zh"><head><meta charset="utf-8">
+<title>SealBench 真实图提取结果人工审核</title>
+<style>
+body{font-family:"Microsoft YaHei",sans-serif;margin:20px;max-width:900px}
+h3{background:#eef;padding:6px 10px;border-left:4px solid #36c}
+.card{border:1px solid #ddd;border-radius:6px;padding:10px;margin:10px 0;background:#fafafa}
+.qh{color:#36c;font-weight:bold}
+.qq{color:#333;margin:4px 0}
+.qa{margin:6px 0}
+.ans{color:#c00;font-size:1.05em}
+.gold{color:#060;background:#e8f5e9;padding:4px;border-radius:4px}
+.judge{margin-top:6px}
+.judge label{margin-right:12px}
+.judge input[type=text]{width:420px}
+#bar{position:fixed;top:0;left:0;right:0;background:#222;color:#fff;padding:10px;z-index:9}
+#bar button{padding:6px 14px;margin-right:10px}
+details{margin:4px 0}
+</style></head><body>
+<div id="bar">
+  共 56 张图 / 153 个审核项。
+  <button onclick="markAll()">全部标为正确</button>
+  <button onclick="exportJSON()">导出审核结果 reviewed_real_ext.jsonl</button>
+  <span id="stat"></span>
+</div>
+<div style="margin-top:60px">
+<h2>审核说明</h2>
+<ul>
+<li>审核对象是<b>模型识别答案</b>（红字）。对照图片判断它读得对不对。</li>
+<li>默认全部"正确"——你只需要把<b>识别错误</b>的项改为"错误"，并在备注里写正确内容。</li>
+<li>"参考"折叠里是双通道共识标注值（银标准），仅供对照，不作为你对错的依据。</li>
+<li>审完点右上角"导出"，把下载的 reviewed_real_ext.jsonl 放到 seal-bench\metadata\annotate\ 目录，通知助手回写重算。</li>
+</ul>
+</div>
+<div class="imgblock" id="img1">
+<h3>1. realweb_0021.jpg</h3>
+<img src="data/real/realweb_0021.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04756">
+<div class="qh">[t4x-04756] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海吴泾物业管理有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：上海昊泾物业管理有限公司 ｜ 标注置信：双通道近似分歧(≤3字)</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04756" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04756" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04756" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img2">
+<h3>2. realweb_0033.jpg</h3>
+<img src="data/real/realweb_0033.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04757">
+<div class="qh">[t4x-04757] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">广州万科</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：广州万科 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04757" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04757" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04757" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04758">
+<div class="qh">[t4x-04758] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">刘德华</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：刘德华 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04758" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04758" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04758" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04759">
+<div class="qh">[t4x-04759] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">广州市其科名有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：广州市其科技有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04759" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04759" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04759" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img3">
+<h3>3. realweb_0056.jpg</h3>
+<img src="data/real/realweb_0056.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04760">
+<div class="qh">[t4x-04760] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">浙江龙剑律师事务所</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：浙江龙剑律师事务所 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04760" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04760" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04760" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04761">
+<div class="qh">[t4x-04761] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">浙江龙剑律师事务所</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：浙江龙剑律师事务所 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04761" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04761" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04761" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img4">
+<h3>4. realweb_0079.jpg</h3>
+<img src="data/real/realweb_0079.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04762">
+<div class="qh">[t4x-04762] 审核项：法定代表人姓名</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方法定代表人的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">徐志林</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：徐志林 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04762" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04762" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04762" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04763">
+<div class="qh">[t4x-04763] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">徐志林</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：徐林 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04763" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04763" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04763" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04764">
+<div class="qh">[t4x-04764] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海中基电业有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：上海中基电业有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04764" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04764" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04764" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img5">
+<h3>5. realweb_0082.jpg</h3>
+<img src="data/real/realweb_0082.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04765">
+<div class="qh">[t4x-04765] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">陕西省住房保障管理局</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：陕西省住房保障管理局 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04765" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04765" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04765" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04766">
+<div class="qh">[t4x-04766] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">陕西省住房保障管理局</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：陕西省住房保障管理局 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04766" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04766" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04766" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img6">
+<h3>6. realweb_0171.jpg</h3>
+<img src="data/real/realweb_0171.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04767">
+<div class="qh">[t4x-04767] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">开封市交通实业有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：开封市交通实业有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04767" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04767" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04767" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04768">
+<div class="qh">[t4x-04768] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">河南憨人汽车贸易有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：河南憨人汽车贸易有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04768" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04768" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04768" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img7">
+<h3>7. realweb_0288.jpg</h3>
+<img src="data/real/realweb_0288.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04769">
+<div class="qh">[t4x-04769] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">杭州网严产贸易有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：杭州网易严选贸易有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04769" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04769" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04769" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04770">
+<div class="qh">[t4x-04770] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">杭州网严产贸易有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：杭州网易严选贸易有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04770" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04770" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04770" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img8">
+<h3>8. realweb_0290.jpg</h3>
+<img src="data/real/realweb_0290.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04771">
+<div class="qh">[t4x-04771] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">xxx股份有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：xxx股份有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04771" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04771" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04771" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04772">
+<div class="qh">[t4x-04772] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">李四</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：李四 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04772" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04772" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04772" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04773">
+<div class="qh">[t4x-04773] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">北京安证通信息科技股份有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：北京安证通信息科技股份有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04773" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04773" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04773" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04774">
+<div class="qh">[t4x-04774] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">北京安证通信息科技股份有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：北京安证通信息科技股份有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04774" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04774" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04774" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img9">
+<h3>9. realweb_0291.jpg</h3>
+<img src="data/real/realweb_0291.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04775">
+<div class="qh">[t4x-04775] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">大连市上海路联合企业总公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：大连市工商联合企业建设公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04775" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04775" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04775" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04776">
+<div class="qh">[t4x-04776] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">大连市上海路联合企业总公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：大连市工商联合企业建设公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04776" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04776" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04776" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04777">
+<div class="qh">[t4x-04777] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">张宝顺</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：张宝顺 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04777" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04777" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04777" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img10">
+<h3>10. realweb_0341.jpg</h3>
+<img src="data/real/realweb_0341.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04778">
+<div class="qh">[t4x-04778] 审核项：法定代表人姓名</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方法定代表人的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">袁建华</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：袁建华 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04778" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04778" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04778" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04779">
+<div class="qh">[t4x-04779] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">袁建华</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：袁建华 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04779" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04779" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04779" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img11">
+<h3>11. realweb_0356.jpg</h3>
+<img src="data/real/realweb_0356.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04780">
+<div class="qh">[t4x-04780] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">湖南省人民医院星沙院区</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：湖南省人民医院（星沙院区）人事部 ｜ 标注置信：双通道重大分歧</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04780" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04780" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04780" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04781">
+<div class="qh">[t4x-04781] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">湖南省人民医院星沙院区</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：湖南省人民医院星沙院区 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04781" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04781" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04781" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04782">
+<div class="qh">[t4x-04782] 审核项：法定代表人姓名</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方法定代表人的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">李放军</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：李放军 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04782" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04782" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04782" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04783">
+<div class="qh">[t4x-04783] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">李放军</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：李放军 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04783" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04783" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04783" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img12">
+<h3>12. realweb_0365.jpg</h3>
+<img src="data/real/realweb_0365.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04784">
+<div class="qh">[t4x-04784] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">李文园</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：李文国 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04784" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04784" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04784" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img13">
+<h3>13. realweb_0396.jpg</h3>
+<img src="data/real/realweb_0396.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04785">
+<div class="qh">[t4x-04785] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">深圳市某科技有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：深圳市某科技有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04785" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04785" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04785" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04786">
+<div class="qh">[t4x-04786] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">深圳市某科技有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：深圳市某科技有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04786" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04786" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04786" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04787">
+<div class="qh">[t4x-04787] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">古力娜扎</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：古力娜扎 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04787" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04787" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04787" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img14">
+<h3>14. realweb_0450.jpg</h3>
+<img src="data/real/realweb_0450.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04788">
+<div class="qh">[t4x-04788] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海理工大学管理学院</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：上海理工大学管理学院 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04788" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04788" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04788" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04789">
+<div class="qh">[t4x-04789] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海理工大学管理学院</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：上海理工大学管理学院 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04789" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04789" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04789" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04790">
+<div class="qh">[t4x-04790] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海鼎迈北勤会计师事务所有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：上海鼎迈北平会计师事务所有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04790" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04790" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04790" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04791">
+<div class="qh">[t4x-04791] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海鼎迈北勤会计师事务所有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：上海鼎迈北平会计师事务所有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04791" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04791" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04791" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04792">
+<div class="qh">[t4x-04792] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">张玲</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：张玲 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04792" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04792" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04792" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img15">
+<h3>15. realweb_0451.jpg</h3>
+<img src="data/real/realweb_0451.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04793">
+<div class="qh">[t4x-04793] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">广东省麦思科学仪器创新研究院</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：广东省赛思科学仪器创新研究院 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04793" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04793" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04793" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04794">
+<div class="qh">[t4x-04794] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">广东省麦思科学仪器创新研究院</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：广东省赛思科学仪器创新研究院 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04794" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04794" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04794" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img16">
+<h3>16. realweb_0458.jpg</h3>
+<img src="data/real/realweb_0458.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04795">
+<div class="qh">[t4x-04795] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">焦作集团有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：焦点科技有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04795" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04795" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04795" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img17">
+<h3>17. realweb_0484.jpg</h3>
+<img src="data/real/realweb_0484.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04796">
+<div class="qh">[t4x-04796] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">山东玉皇化工有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：山东玉皇化工有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04796" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04796" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04796" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img18">
+<h3>18. realweb_0488.jpg</h3>
+<img src="data/real/realweb_0488.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04797">
+<div class="qh">[t4x-04797] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">樊京京</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：樊京京 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04797" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04797" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04797" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04798">
+<div class="qh">[t4x-04798] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">樊京京</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：樊京京 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04798" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04798" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04798" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img19">
+<h3>19. realweb_0489.jpg</h3>
+<img src="data/real/realweb_0489.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04799">
+<div class="qh">[t4x-04799] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">江苏溧武水务有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：江苏武进水务有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04799" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04799" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04799" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04800">
+<div class="qh">[t4x-04800] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">江苏溧武水务（常州）有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：江苏武进水务（常州）有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04800" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04800" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04800" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img20">
+<h3>20. realweb_0499.jpg</h3>
+<img src="data/real/realweb_0499.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04801">
+<div class="qh">[t4x-04801] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中弘控股股份有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中弘控股股份有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04801" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04801" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04801" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04802">
+<div class="qh">[t4x-04802] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中弘控股股份有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中弘控股股份有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04802" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04802" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04802" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04803">
+<div class="qh">[t4x-04803] 审核项：法定代表人姓名</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方法定代表人的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">王继红</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：王继红 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04803" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04803" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04803" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04804">
+<div class="qh">[t4x-04804] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">王继红</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：王继红 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04804" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04804" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04804" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04805">
+<div class="qh">[t4x-04805] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中弘卓业集团有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中弘卓业集团有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04805" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04805" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04805" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04806">
+<div class="qh">[t4x-04806] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中弘卓业集团有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中弘卓业集团有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04806" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04806" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04806" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04807">
+<div class="qh">[t4x-04807] 审核项：法定代表人姓名</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方法定代表人的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">王继红</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：王继红 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04807" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04807" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04807" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img21">
+<h3>21. realweb_0505.jpg</h3>
+<img src="data/real/realweb_0505.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04808">
+<div class="qh">[t4x-04808] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">柳州五菱汽车工业有限公司山东分公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：柳州五菱汽车工业有限公司山东分公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04808" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04808" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04808" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04809">
+<div class="qh">[t4x-04809] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">丁欢欢</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：丁双双 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04809" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04809" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04809" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img22">
+<h3>22. realweb_0509.jpg</h3>
+<img src="data/real/realweb_0509.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04810">
+<div class="qh">[t4x-04810] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">北京鹏通金羽广告有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：北京鹏通金羽广告有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04810" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04810" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04810" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img23">
+<h3>23. realweb_0511.jpg</h3>
+<img src="data/real/realweb_0511.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04811">
+<div class="qh">[t4x-04811] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">苏州奇妙房屋租赁有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：苏州奇妙房屋租赁有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04811" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04811" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04811" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04812">
+<div class="qh">[t4x-04812] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">苏州奇妙房屋租赁有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：苏州奇妙房屋租赁有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04812" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04812" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04812" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img24">
+<h3>24. realweb_0516.jpg</h3>
+<img src="data/real/realweb_0516.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04813">
+<div class="qh">[t4x-04813] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">北京云集投资有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：北京云集投资有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04813" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04813" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04813" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04814">
+<div class="qh">[t4x-04814] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">北京云集投资有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：北京云集投资有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04814" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04814" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04814" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04815">
+<div class="qh">[t4x-04815] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">周亮</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：周之亮 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04815" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04815" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04815" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04816">
+<div class="qh">[t4x-04816] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">青岛银行股份有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：青岛银行股份有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04816" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04816" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04816" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04817">
+<div class="qh">[t4x-04817] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">青岛银行股份有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：青岛银行股份有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04817" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04817" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04817" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04818">
+<div class="qh">[t4x-04818] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">王荣</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：王荣 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04818" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04818" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04818" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img25">
+<h3>25. realweb_0521.jpg</h3>
+<img src="data/real/realweb_0521.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04819">
+<div class="qh">[t4x-04819] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">昆明市政务服务管理局</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：昆明市政务服务管理局 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04819" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04819" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04819" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04820">
+<div class="qh">[t4x-04820] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">昆明市政务服务管理局</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：昆明市政务服务管理局 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04820" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04820" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04820" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img26">
+<h3>26. realweb_0522.jpg</h3>
+<img src="data/real/realweb_0522.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04821">
+<div class="qh">[t4x-04821] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">万科企业股份有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：万科企业股份有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04821" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04821" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04821" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04822">
+<div class="qh">[t4x-04822] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">万科企业股份有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：万科企业股份有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04822" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04822" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04822" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04823">
+<div class="qh">[t4x-04823] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">陈友星</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：刘林 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04823" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04823" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04823" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img27">
+<h3>27. realweb_0529.jpg</h3>
+<img src="data/real/realweb_0529.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04824">
+<div class="qh">[t4x-04824] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海广泽食品科技股份有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：上海广泽食品科技股份有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04824" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04824" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04824" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04825">
+<div class="qh">[t4x-04825] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海广泽食品科技股份有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：上海广泽食品科技股份有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04825" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04825" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04825" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04826">
+<div class="qh">[t4x-04826] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">兴业国际信托有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：兴业国际信托有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04826" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04826" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04826" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04827">
+<div class="qh">[t4x-04827] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">兴业国际信托有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：兴业国际信托有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04827" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04827" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04827" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04828">
+<div class="qh">[t4x-04828] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">杨华辉</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：杨华辉 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04828" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04828" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04828" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img28">
+<h3>28. realweb_0546.jpg</h3>
+<img src="data/real/realweb_0546.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04829">
+<div class="qh">[t4x-04829] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">刘猛</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：孙猛 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04829" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04829" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04829" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img29">
+<h3>29. realweb_0547.jpg</h3>
+<img src="data/real/realweb_0547.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04830">
+<div class="qh">[t4x-04830] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">房地产经纪有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：房地产经纪有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04830" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04830" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04830" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04831">
+<div class="qh">[t4x-04831] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">房地产经纪有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：房地产经纪有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04831" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04831" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04831" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img30">
+<h3>30. realweb_0558.jpg</h3>
+<img src="data/real/realweb_0558.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04832">
+<div class="qh">[t4x-04832] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">南阳职业学院</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：昆明冶金高等专科学校 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04832" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04832" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04832" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04833">
+<div class="qh">[t4x-04833] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">颜利</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：颜利 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04833" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04833" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04833" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img31">
+<h3>31. realweb_0564.jpg</h3>
+<img src="data/real/realweb_0564.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04834">
+<div class="qh">[t4x-04834] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">庆阳市高等级公路项目建设指挥部办公室</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：庆阳市高等级公路项目建设管理办公室 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04834" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04834" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04834" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04835">
+<div class="qh">[t4x-04835] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">庆阳市高等级公路项目建设指挥部办公室</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：庆阳市高等级公路项目建设管理办公室 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04835" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04835" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04835" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04836">
+<div class="qh">[t4x-04836] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中铁六局集团有限公司、中铁城市发展投资集团有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中铁六局集团有限公司、中铁城市发展投资集团有限公司（联合体牵头方与成员方均已盖章） ｜ 标注置信：人工复核豁免(联合体)</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04836" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04836" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04836" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04837">
+<div class="qh">[t4x-04837] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中铁六局集团有限公司、中铁城市发展投资集团有限公司联合体</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中铁六局集团有限公司、中铁城市发展投资集团有限公司联合体 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04837" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04837" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04837" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img32">
+<h3>32. realweb_0572.jpg</h3>
+<img src="data/real/realweb_0572.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04838">
+<div class="qh">[t4x-04838] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">陕西智逸实业有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：陕西智逸实业有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04838" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04838" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04838" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04839">
+<div class="qh">[t4x-04839] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">陕西智逸实业有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：陕西智逸实业有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04839" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04839" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04839" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04840">
+<div class="qh">[t4x-04840] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">陕西荣康置业有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：河北荣康置业有限公司 ｜ 标注置信：双通道近似分歧(≤3字)</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04840" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04840" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04840" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04841">
+<div class="qh">[t4x-04841] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">陕西荣康置业有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：河南荣康置业有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04841" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04841" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04841" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img33">
+<h3>33. realweb_0579.jpg</h3>
+<img src="data/real/realweb_0579.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04842">
+<div class="qh">[t4x-04842] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海素冉投资管理有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：上海泰冉投资管理有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04842" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04842" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04842" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04843">
+<div class="qh">[t4x-04843] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海素冉投资管理有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：上海赛冉投资管理有限公司 ｜ 标注置信：双通道近似分歧(≤3字)</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04843" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04843" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04843" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04844">
+<div class="qh">[t4x-04844] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">孙伟</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：孙伟 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04844" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04844" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04844" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img34">
+<h3>34. realweb_0581.jpg</h3>
+<img src="data/real/realweb_0581.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04845">
+<div class="qh">[t4x-04845] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">聊城市我们俱乐部</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：聊城市我们俱乐部 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04845" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04845" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04845" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img35">
+<h3>35. realweb_0588.jpg</h3>
+<img src="data/real/realweb_0588.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04846">
+<div class="qh">[t4x-04846] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">百色市田阳区朝情做人社会服务中心</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：百色市田阳区田阳镇人民政府 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04846" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04846" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04846" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04847">
+<div class="qh">[t4x-04847] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">百色市田阳区朝情做人社会服务中心</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：百色市田阳区田阳镇人民政府 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04847" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04847" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04847" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img36">
+<h3>36. realweb_0601.jpg</h3>
+<img src="data/real/realweb_0601.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04848">
+<div class="qh">[t4x-04848] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">潍坊恒泰热力有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：潍坊恒泰热力有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04848" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04848" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04848" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04849">
+<div class="qh">[t4x-04849] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">潍坊恒泰热力有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：潍坊恒泰热力有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04849" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04849" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04849" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img37">
+<h3>37. realweb_0608.jpg</h3>
+<img src="data/real/realweb_0608.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04850">
+<div class="qh">[t4x-04850] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">陕西省住房保障管理局</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：陕西省住房保障管理局 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04850" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04850" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04850" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04851">
+<div class="qh">[t4x-04851] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">陕西省住房保障管理局</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：陕西省住房保障管理局 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04851" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04851" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04851" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04852">
+<div class="qh">[t4x-04852] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">无法辨认</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：陕西省住房保障管理局 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04852" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04852" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04852" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img38">
+<h3>38. realweb_0614.jpg</h3>
+<img src="data/real/realweb_0614.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04853">
+<div class="qh">[t4x-04853] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">成都市龙泉驿区走马镇人民政府</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：重庆市九龙坡区走马镇人民政府 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04853" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04853" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04853" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04854">
+<div class="qh">[t4x-04854] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">成都市龙泉驿区走马镇人民政府</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：重庆市九龙坡区走马镇人民政府 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04854" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04854" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04854" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img39">
+<h3>39. realweb_0622.jpg</h3>
+<img src="data/real/realweb_0622.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04855">
+<div class="qh">[t4x-04855] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">北京中恒博瑞数字电力科技有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：北京中恒博瑞数字电力科技有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04855" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04855" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04855" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04856">
+<div class="qh">[t4x-04856] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">北京中恒博瑞数字电力科技有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：北京中恒博瑞数字电力科技有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04856" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04856" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04856" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04857">
+<div class="qh">[t4x-04857] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">苏州中恒普瑞能源互联网科技有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：苏州中恒普瑞能源互联网科技有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04857" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04857" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04857" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04858">
+<div class="qh">[t4x-04858] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">苏州中恒普瑞能源互联网科技有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：苏州中恒普瑞能源互联网科技有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04858" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04858" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04858" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img40">
+<h3>40. realweb_0626.jpg</h3>
+<img src="data/real/realweb_0626.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04859">
+<div class="qh">[t4x-04859] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中利基业（北京）投资担保有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中利基业（北京）投资担保有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04859" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04859" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04859" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04860">
+<div class="qh">[t4x-04860] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中利基业（北京）投资担保有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中利基业（北京）投资担保有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04860" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04860" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04860" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img41">
+<h3>41. realweb_0630.jpg</h3>
+<img src="data/real/realweb_0630.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04861">
+<div class="qh">[t4x-04861] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">北京中和世延商贸有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：北京中和世延商贸有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04861" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04861" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04861" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04862">
+<div class="qh">[t4x-04862] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">北京中和世延商贸有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：北京中和世延商贸有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04862" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04862" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04862" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img42">
+<h3>42. realweb_0635.jpg</h3>
+<img src="data/real/realweb_0635.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04863">
+<div class="qh">[t4x-04863] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">陶勇</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：陶勇 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04863" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04863" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04863" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img43">
+<h3>43. realweb_0650.jpg</h3>
+<img src="data/real/realweb_0650.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04864">
+<div class="qh">[t4x-04864] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">全国绿色基地三农工作委员会</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：全国绿色基地三农工作委员会 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04864" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04864" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04864" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04865">
+<div class="qh">[t4x-04865] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">全国绿色基地三农工作委员会</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：全国绿色基地三农工作委员会 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04865" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04865" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04865" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04866">
+<div class="qh">[t4x-04866] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中城创信息咨询有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中城创信息咨询有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04866" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04866" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04866" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04867">
+<div class="qh">[t4x-04867] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中城创信息咨询有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中城创信息咨询有限公司（中国新城镇建设） ｜ 标注置信：双通道重大分歧</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04867" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04867" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04867" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img44">
+<h3>44. realweb_0651.jpg</h3>
+<img src="data/real/realweb_0651.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04868">
+<div class="qh">[t4x-04868] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">星尚美甲用品经营部</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：星尚美甲用品经营部 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04868" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04868" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04868" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04869">
+<div class="qh">[t4x-04869] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">星尚美甲用品经营部</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：星尚美甲用品经营部 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04869" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04869" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04869" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04870">
+<div class="qh">[t4x-04870] 审核项：法定代表人姓名</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方法定代表人的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">历玉尚</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：万玉尚 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04870" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04870" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04870" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04871">
+<div class="qh">[t4x-04871] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">历玉尚</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：万玉尚 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04871" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04871" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04871" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img45">
+<h3>45. realweb_0654.jpg</h3>
+<img src="data/real/realweb_0654.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04872">
+<div class="qh">[t4x-04872] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">天津市武清区发展和改革委员会</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：天津市武清区发展和改革委员会 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04872" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04872" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04872" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04873">
+<div class="qh">[t4x-04873] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">天津市武清区发展和改革委员会</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：天津市武清区发展和改革委员会 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04873" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04873" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04873" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04874">
+<div class="qh">[t4x-04874] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中国铁路设计集团有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中国铁路设计集团有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04874" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04874" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04874" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04875">
+<div class="qh">[t4x-04875] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中国铁路设计集团有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中国铁路设计集团有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04875" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04875" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04875" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04876">
+<div class="qh">[t4x-04876] 审核项：法定代表人姓名</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方法定代表人的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">刘为群</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：刘为群 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04876" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04876" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04876" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04877">
+<div class="qh">[t4x-04877] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">刘为群</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：刘为群 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04877" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04877" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04877" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img46">
+<h3>46. realweb_0662.jpg</h3>
+<img src="data/real/realweb_0662.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04878">
+<div class="qh">[t4x-04878] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">天津外国语大学滨海外事学院</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：天津外国语大学滨海外事学院 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04878" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04878" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04878" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img47">
+<h3>47. realweb_0730.jpg</h3>
+<img src="data/real/realweb_0730.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04879">
+<div class="qh">[t4x-04879] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海合禾影视投资有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：上海合禾影视投资有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04879" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04879" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04879" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04880">
+<div class="qh">[t4x-04880] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海合禾影视投资有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：上海合禾影视投资有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04880" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04880" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04880" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04881">
+<div class="qh">[t4x-04881] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">无锡美涛柏艺冰文化工作室</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：无锡美涛祥艺影视文化工作室 ｜ 标注置信：双通道近似分歧(≤3字)</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04881" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04881" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04881" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04882">
+<div class="qh">[t4x-04882] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">无锡美涛柏艺冰文化工作室</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：无锡美涛祥艺影视文化工作室 ｜ 标注置信：双通道近似分歧(≤3字)</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04882" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04882" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04882" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img48">
+<h3>48. realweb_0767.jpg</h3>
+<img src="data/real/realweb_0767.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04883">
+<div class="qh">[t4x-04883] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海将帅门企业管理有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：海南将军门企业管理有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04883" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04883" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04883" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04884">
+<div class="qh">[t4x-04884] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">上海将帅门企业管理有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：海南将军门企业管理有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04884" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04884" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04884" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img49">
+<h3>49. realweb_0772.jpg</h3>
+<img src="data/real/realweb_0772.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04885">
+<div class="qh">[t4x-04885] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">黑龙江丰创千林装饰设计工程有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：黑龙江丰创千林装饰设计工程有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04885" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04885" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04885" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04886">
+<div class="qh">[t4x-04886] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">黑龙江丰创千林装饰设计工程有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：黑龙江丰创千林装饰设计工程有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04886" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04886" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04886" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img50">
+<h3>50. realweb_0779.jpg</h3>
+<img src="data/real/realweb_0779.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04887">
+<div class="qh">[t4x-04887] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">西安市长安区韦曲街道办事处</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：西安市长安区韦曲街道办事处 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04887" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04887" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04887" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04888">
+<div class="qh">[t4x-04888] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">西安市长安区韦曲街道办事处</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：西安市长安区韦曲街道办事处 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04888" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04888" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04888" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img51">
+<h3>51. realweb_0780.jpg</h3>
+<img src="data/real/realweb_0780.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04889">
+<div class="qh">[t4x-04889] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">大连宏易达劳务有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：大连宏易达劳务有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04889" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04889" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04889" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04890">
+<div class="qh">[t4x-04890] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">大连宏易达劳务有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：大连宏易达劳务有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04890" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04890" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04890" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04891">
+<div class="qh">[t4x-04891] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">霍佳丰</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：霍传丰 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04891" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04891" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04891" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img52">
+<h3>52. realweb_0802.jpg</h3>
+<img src="data/real/realweb_0802.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04892">
+<div class="qh">[t4x-04892] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">福州市医疗保险管理中心</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：福州市医疗保障基金管理中心 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04892" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04892" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04892" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img53">
+<h3>53. realweb_0850.jpg</h3>
+<img src="data/real/realweb_0850.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04893">
+<div class="qh">[t4x-04893] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">揭阳市乔林堡珠宝有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：揭阳市乔琳珠宝有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04893" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04893" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04893" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04894">
+<div class="qh">[t4x-04894] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">揭阳市乔林堡珠宝有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：揭阳市乔琳珠宝有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04894" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04894" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04894" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04895">
+<div class="qh">[t4x-04895] 审核项：法定代表人姓名</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方法定代表人的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">林伟敦</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：林伟毅 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04895" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04895" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04895" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04896">
+<div class="qh">[t4x-04896] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">林伟敦</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：林伟毅 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04896" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04896" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04896" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04897">
+<div class="qh">[t4x-04897] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">深圳市山石矿业发展有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：深圳市金石矿业管理有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04897" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04897" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04897" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04898">
+<div class="qh">[t4x-04898] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">深圳市山石矿业发展有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：深圳市石兴矿业有限公司 ｜ 标注置信：双通道重大分歧</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04898" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04898" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04898" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img54">
+<h3>54. realweb_0859.jpg</h3>
+<img src="data/real/realweb_0859.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04899">
+<div class="qh">[t4x-04899] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">资中中豪房地产开发有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：资中中豪房地产开发有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04899" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04899" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04899" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04900">
+<div class="qh">[t4x-04900] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">资中中豪房地产开发有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：资中中豪房地产开发有限公司 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04900" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04900" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04900" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img55">
+<h3>55. realweb_0876.jpg</h3>
+<img src="data/real/realweb_0876.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04901">
+<div class="qh">[t4x-04901] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">佛山市粤佳房地产开发有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：佛山市粤佳房地产开发有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04901" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04901" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04901" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04902">
+<div class="qh">[t4x-04902] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">佛山市粤佳房地产开发有限公司</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：佛山市粤佳房地产开发有限公司 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04902" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04902" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04902" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<div class="imgblock" id="img56">
+<h3>56. realweb_0885.jpg</h3>
+<img src="data/real/realweb_0885.jpg" style="max-width:820px;border:1px solid #ccc">
+<div class="card" data-tid="t4x-04903">
+<div class="qh">[t4x-04903] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">浙江马云公益基金会</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：浙江马云公益基金会 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04903" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04903" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04903" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04904">
+<div class="qh">[t4x-04904] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中甲方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">浙江马云公益基金会</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：浙江马云公益基金会 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04904" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04904" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04904" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04905">
+<div class="qh">[t4x-04905] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中甲方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">于君儿</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：于秀红 ｜ 标注置信：单通道读取</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04905" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04905" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04905" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04906">
+<div class="qh">[t4x-04906] 审核项：印章章面名称</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方（盖章）处红色印章上刻制的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中国工程院</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中国工程院 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04906" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04906" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04906" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04907">
+<div class="qh">[t4x-04907] 审核项：合同主体名称</div>
+<div class="qq">这是一份真实合同照片。请读出这份合同中乙方的单位名称，只输出该名称本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">中国工程院</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：中国工程院 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04907" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04907" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04907" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+<div class="card" data-tid="t4x-04908">
+<div class="qh">[t4x-04908] 审核项：签名姓名</div>
+<div class="qq">这是一份真实合同照片。请读出图中乙方法定代表人（签字）处签名的姓名，只输出姓名本身，不要加任何前缀、后缀或解释。</div>
+<div class="qa">模型识别：<b class="ans">何华武</b></div>
+<details><summary>参考（双通道共识标注，仅供复核）</summary><div class="gold">标注参考：何华武 ｜ 标注置信：双通道一致</div></details>
+<div class="judge">判定：<label><input type="radio" name="t4x-04908" value="正确" checked>正确</label> <label><input type="radio" name="t4x-04908" value="错误">错误</label> 备注：<input type="text" class="note" data-tid="t4x-04908" placeholder="错误原因/正确内容（可选）"></div>
+</div>
+</div>
+<script>
+function markAll(){
+  document.querySelectorAll('input[type=radio][value="正确"]').forEach(function(r){r.checked=true});
+  stat();
+}
+function collect(){
+  var out=[];
+  document.querySelectorAll('.card').forEach(function(c){
+    var tid=c.getAttribute('data-tid');
+    var sel=c.querySelector('input[type=radio]:checked');
+    var note=c.querySelector('.note').value;
+    out.push({task_id:tid, verdict: sel? sel.value : '未审核', note: note});
+  });
+  return out;
+}
+function exportJSON(){
+  var rows=collect();
+  var text=rows.map(function(r){return JSON.stringify(r)}).join('\n');
+  var blob=new Blob([text],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='reviewed_real_ext.jsonl';
+  a.click();
+}
+function stat(){
+  var r=collect(); var bad=r.filter(function(x){return x.verdict==='错误'}).length;
+  document.getElementById('stat').textContent='已标记错误：'+bad+' 条';
+}
+document.addEventListener('change', stat);
+stat();
+</script></body></html>
