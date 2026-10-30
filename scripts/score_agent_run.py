@@ -60,7 +60,7 @@ def main():
         return subset_map.get(os.path.basename(path), "?")
 
     preds = {}
-    for p in glob.glob(os.path.join(RUNS, "**", "predictions_batch_*.jsonl"), recursive=True):
+    for p in glob.glob(os.path.join(RUNS, "**", "predictions_*.jsonl"), recursive=True):
         for r in read_jsonl(p):
             preds[r["task_id"]] = r["answer"]
 
@@ -181,9 +181,14 @@ def main():
     # T4-ext 开放作答评分（编辑距离）
     if any(t.startswith("t4x-") for t in preds):
         ex_rows = []
+        skipped_gold = 0
         for g in ext_gold:
             tid = g["task_id"]
             if tid not in preds:
+                continue
+            # gold 存在重大标注分歧/联合体长文本注记的题，不可作单一标准答案，不计分
+            if (g.get("meta") or {}).get("gold_confidence") in ("conflict_far", "manual_review"):
+                skipped_gold += 1
                 continue
             p, go = norm_txt(preds[tid]), norm_txt(g["answer"])
             ed = edit_distance(p, go)
@@ -195,7 +200,7 @@ def main():
             near = sum(1 for r in ex_rows if r["near"])
             mean_ed = sum(r["ed"] for r in ex_rows) / n
             lines += ["## T4-ext 章面文字提取（开放作答，编辑距离评分）", "",
-                      "- 题数：%d" % n,
+                      "- 计分题数：%d（另有 %d 题 gold 存在重大分歧/联合体注记，不计分）" % (n, skipped_gold),
                       "- 精确匹配率：**%.1f%%**" % (100.0 * exact / n),
                       "- 近似匹配率（编辑距离≤2）：**%.1f%%**" % (100.0 * near / n),
                       "- 平均编辑距离：%.2f" % mean_ed,
